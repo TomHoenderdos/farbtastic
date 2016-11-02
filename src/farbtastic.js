@@ -134,6 +134,7 @@ $._farbtastic = function (container, options) {
     // Draw widget base layers.
     fb.drawCircle();
     fb.drawMask();
+    fb.bindTouch();
   }
 
   /**
@@ -447,16 +448,18 @@ $._farbtastic = function (container, options) {
   }
 
   // TouchStart bound, calls conversion of touchpoints to mousepoints
-  $('*', e).bind("touchstart", function (e) {
-    // Capture mouse
-    if (!document.dragging) {
-      $(document).bind('touchmove', fb.touchmove).bind('touchend', fb.touchend);
-      document.dragging = true;
-    }
-    fb.mousedown( fb.touchconvert(e) );
-    e.preventDefault();
-    return false;
-  });
+  fb.bindTouch = function() {
+    $('*', container).bind("touch touchstart", function (e) {
+      // Capture mouse
+      if (!document.dragging) {
+        $(document).bind('touchmove', fb.touchmove).bind('touchend', fb.touchend);
+        document.dragging = true;
+      }
+      fb.mousedown( fb.touchconvert(e) );
+      e.preventDefault();
+      return false;
+    });
+  }
 
   /* Various color utility functions */
   fb.dec2hex = function (x) {
